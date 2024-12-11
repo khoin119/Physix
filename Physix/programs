@@ -1,1 +1,55 @@
-Programs
+simulation MySimulation {
+    objects {
+        object Ball {
+            mass = 5.0 
+            position = (0.0, 5.0)
+            velocity = (5.0, 0.0)
+        }
+    }
+    forces {
+        force Gravity 
+        magnitude = 9.8 
+        direction = "down"
+    }
+    events {
+        "throwing"
+    }
+}
+
+
+simulation MySimulation {
+    objects {
+        object Box {
+            mass = 5.0 
+            position = (0.0, 10.0)
+            velocity = (5.0, 0.0)
+        }
+    }
+    forces {
+        force Gravity 
+        magnitude = 9.8 
+        direction = "down"
+    }
+    events {
+        "free_fall"
+        }
+}
+
+simulation MySimulation {
+    objects {
+        object Ball {
+            mass = 5.0 
+            position = (0.0, 5.0)
+            velocity = (10.0)
+            launch_angle = 45
+        }
+    }
+    forces {
+        force Gravity 
+        magnitude = 9.8 
+        direction = "down"
+    }
+    events {
+        "throwing_angle"
+    }
+}
