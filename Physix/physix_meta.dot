@@ -1,0 +1,34 @@
+
+    digraph textX {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+4678599888[ label="{Simulation|name: ID\l}"]
+
+4678599984[ label="{Object|name: ID\lmass: FLOAT\lx: FLOAT\ly: FLOAT\lvix: FLOAT\lviy: FLOAT\lv_initial: FLOAT\ltheta: FLOAT\l}"]
+
+4678600080[ label="{Force|name: ID\lmagnitude: FLOAT\ldirection: STRING\l}"]
+
+4678600176[ label="{Event|name: STRING\l}"]
+
+
+
+4678599888 -> 4678599984[arrowtail=diamond, dir=both, headlabel="objects 1..*"]
+4678599888 -> 4678600080[arrowtail=diamond, dir=both, headlabel="forces 1..*"]
+4678599888 -> 4678600176[arrowtail=diamond, dir=both, headlabel="events 1..*"]
+match_rules [ shape=plaintext, label=< <table>
+	<tr>
+		<td><b>Comment</b></td><td>\/\/.*$</td>
+	</tr>
+</table> >]
+
+
+}

@@ -1,0 +1,30 @@
+Simulation:
+    'simulation' name=ID '{'
+        'objects' '{' objects+=Object '}'
+        'forces' '{' forces+=Force '}'
+        'events' '{' events+=Event '}'
+    '}'
+;
+
+Object:
+    'object' name=ID '{'
+        'mass' '=' mass=FLOAT 
+        'position' '=' '(' x=FLOAT ',' y=FLOAT ')'
+        ('velocity' '=' '(' ((vix=FLOAT ',' viy=FLOAT) | (v_initial=FLOAT))')')?
+        ('launch_angle' '=' theta=FLOAT)? 
+    '}'
+;
+
+Force:
+    'force' name=ID 
+        'magnitude' '=' magnitude=FLOAT 
+        'direction' '=' direction=STRING
+;
+
+Event:
+    name=STRING
+;
+
+Comment:
+  /\/\/.*$/
+;

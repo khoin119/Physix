@@ -1,0 +1,22 @@
+
+    digraph textX {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+4678434592 -> 4678431568 [label="objects:0" arrowtail=diamond dir=both]
+4678431568[label="{Ball:Object|+mass:float=5.0\l+x:float=0.0\l+y:float=5.0\l+vix:float=5.0\l+viy:float=0.0\l+v_initial:float=0.0\l+theta:float=0.0\l}"]
+4678434592 -> 4678430800 [label="forces:0" arrowtail=diamond dir=both]
+4678430800[label="{Gravity:Force|+magnitude:float=9.8\l+direction:str='down'\l}"]
+4678434592 -> 4678429312 [label="events:0" arrowtail=diamond dir=both]
+4678429312[label="{throwing:Event|}"]
+4678434592[label="{MySimulation:Simulation|}"]
+
+}
