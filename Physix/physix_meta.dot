@@ -11,19 +11,22 @@
     edge[dir=black,arrowtail=empty]
 
 
-4678599888[ label="{Simulation|name: ID\l}"]
+4683436384[ label="{Simulation|name: ID\l}"]
 
-4678599984[ label="{Object|name: ID\lmass: FLOAT\lx: FLOAT\ly: FLOAT\lvix: FLOAT\lviy: FLOAT\lv_initial: FLOAT\ltheta: FLOAT\l}"]
+4683436480[ label="{Object|name: ID\lmass: FLOAT\lx: FLOAT\ly: FLOAT\lvix: FLOAT\lviy: FLOAT\lv_initial: FLOAT\ltheta: FLOAT\l}"]
 
-4678600080[ label="{Force|name: ID\lmagnitude: FLOAT\ldirection: STRING\l}"]
+4683436576[ label="{Force|name: ID\lmagnitude: FLOAT\ldirection: STRING\l}"]
 
-4678600176[ label="{Event|name: STRING\l}"]
+4683436672[ label="{Event|name: STRING\l}"]
+
+4683436768[ label="{Run|simulationName: ID\l}"]
 
 
 
-4678599888 -> 4678599984[arrowtail=diamond, dir=both, headlabel="objects 1..*"]
-4678599888 -> 4678600080[arrowtail=diamond, dir=both, headlabel="forces 1..*"]
-4678599888 -> 4678600176[arrowtail=diamond, dir=both, headlabel="events 1..*"]
+4683436384 -> 4683436480[arrowtail=diamond, dir=both, headlabel="objects 1..*"]
+4683436384 -> 4683436576[arrowtail=diamond, dir=both, headlabel="forces 1..*"]
+4683436384 -> 4683436672[arrowtail=diamond, dir=both, headlabel="events 1..*"]
+4683436384 -> 4683436768[arrowtail=diamond, dir=both, headlabel="runs 1..*"]
 match_rules [ shape=plaintext, label=< <table>
 	<tr>
 		<td><b>Comment</b></td><td>\/\/.*$</td>
