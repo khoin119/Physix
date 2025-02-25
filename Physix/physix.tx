@@ -3,7 +3,9 @@ Simulation:
         'objects' '{' objects+=Object '}'
         'forces' '{' forces+=Force '}'
         'events' '{' events+=Event '}'
+
     '}'
+    runs+=Run
 ;
 
 Object:
@@ -23,6 +25,10 @@ Force:
 
 Event:
     name=STRING
+;
+
+Run:
+    'run' simulationName=ID
 ;
 
 Comment:
