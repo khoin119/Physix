@@ -36,9 +36,19 @@ class Event:
     def __str__(self):
         return f"{self.name}"  # return the name of the event as a string
 
+class Run:
+    def __init__(self, simulationName):
+        self.simulationName = simulationName
 
 class SimulationInterpreter:
     def __init__(self, model):
+        
+        self.runs = []
+        for run in model.runs:
+            new_run = Run(run.simulationName)
+            self.runs.append(new_run)
+        
+        self.modelName = model.name
         
         self.objects = [] # create objects
         for obj in model.objects:
@@ -71,11 +81,7 @@ class SimulationInterpreter:
         if event_name == "free_fall":
             self.calculate_free_fall()
     
-    def run_event(self):
-        # Automatically run each event found in the model
-        for event_name in self.events:
-            print(f"Running event: {event_name}")
-            self.calculate(event_name)
+    
     
     def calculate_throwing_angle(self):
     
@@ -200,6 +206,80 @@ class SimulationInterpreter:
         self.plot_trajectory(obj_vix, obj_viy, f1, t_total, obj_ypos) # call the plot methods
         self.plot_additional_graphs(obj_vix, obj_viy, f1, t_total, obj_ypos)
 
+    def calculate_throwing_up(self):
+        
+        for force in self.forces: # find gravity force
+            if force.name.lower() == "gravity":
+                gravity_force = force
+                break
+        
+        for object in self.objects: # find falling object
+            if object.name.lower() != "ground" and object.name.lower() != "floor":
+                throwing_object = object
+                break
+
+        if not gravity_force or not throwing_object:
+            print("Could not find gravity force or throwing object.")
+            return
+
+        f1 = gravity_force.magnitude
+        obj_viy = throwing_object.viy
+        obj_ypos = throwing_object.y
+
+        t_peak = obj_viy / f1
+        t_total = 2 * t_peak
+        h_max = obj_ypos + (obj_viy ** 2) / (2 * f1)
+
+        print(f"Time to reach the highest point: {t_peak:.7f} seconds")
+        print(f"Total time of flight: {t_total:.7f} seconds")
+        print(f"Maximum height: {h_max:.7f} meters")
+        
+        self.plot_throw_up_graph(obj_ypos, obj_viy, f1, t_total)
+
+    def calculate_free_fall(self):
+        
+        for force in self.forces: # find gravity force
+            if force.name.lower() == "gravity":
+                gravity_force = force
+                break
+        
+        for object in self.objects: # find falling object
+            if object.name.lower() != "ground" and object.name.lower() != "floor":
+                falling_object = object
+                break
+
+        if not gravity_force or not falling_object:
+            print("Could not find gravity force or falling object.")
+            return
+
+        f1 = gravity_force.magnitude
+        obj1_height = falling_object.y
+        obj1_name = falling_object.name
+
+        t = math.sqrt((2 * obj1_height) / f1)
+        vf = math.sqrt(2 * f1 * obj1_height)
+
+        print(f"{obj1_name} takes {t:.7f} seconds to reach the ground.")
+        print(f"The final speed of {obj1_name} is {vf:.7f} m/s.")
+
+        yes_no = input(f"Are you looking for {obj1_name}'s position? (yes/no): ").lower()
+        
+        ty = 0
+        height_t = 0
+        
+        if yes_no in ["yes", "y"]:
+            try:
+                ty = float(input("At what time? (in seconds): "))
+                if ty < 0 or ty > t:
+                    raise ValueError("Time must be between 0 and the total fall time.")
+                height_t = obj1_height - (1 / 2) * f1 * (ty ** 2)
+            except ValueError as e:
+                print(e)
+            print(f"Height of {obj1_name}: {height_t:.7f} meters at {ty:.7f} seconds.")
+
+        self.plot_freefall_graphs(f1, t, obj1_height)
+
+
     def plot_trajectory(self, vix, viy, gravity, total_time, initial_height):
         times = []
         time_step = 0.01
@@ -321,80 +401,20 @@ class SimulationInterpreter:
             plt.legend()  
             plt.show()
 
-    def calculate_throwing_up(self):
-        
-        for force in self.forces: # find gravity force
-            if force.name.lower() == "gravity":
-                gravity_force = force
-                break
-        
-        for object in self.objects: # find falling object
-            if object.name.lower() != "ground" and object.name.lower() != "floor":
-                throwing_object = object
-                break
-
-        if not gravity_force or not throwing_object:
-            print("Could not find gravity force or throwing object.")
-            return
-
-        f1 = gravity_force.magnitude
-        obj_viy = throwing_object.viy
-        obj_ypos = throwing_object.y
-
-        t_peak = obj_viy / f1
-        t_total = 2 * t_peak
-        h_max = obj_ypos + (obj_viy ** 2) / (2 * f1)
-
-        print(f"Time to reach the highest point: {t_peak:.7f} seconds")
-        print(f"Total time of flight: {t_total:.7f} seconds")
-        print(f"Maximum height: {h_max:.7f} meters")
-        
-        self.plot_throw_up_graph(obj_ypos, obj_viy, f1, t_total)
-
-    def calculate_free_fall(self):
-        
-        for force in self.forces: # find gravity force
-            if force.name.lower() == "gravity":
-                gravity_force = force
-                break
-        
-        for object in self.objects: # find falling object
-            if object.name.lower() != "ground" and object.name.lower() != "floor":
-                falling_object = object
-                break
-
-        if not gravity_force or not falling_object:
-            print("Could not find gravity force or falling object.")
-            return
-
-        f1 = gravity_force.magnitude
-        obj1_height = falling_object.y
-        obj1_name = falling_object.name
-
-        t = math.sqrt((2 * obj1_height) / f1)
-        vf = math.sqrt(2 * f1 * obj1_height)
-
-        print(f"{obj1_name} takes {t:.7f} seconds to reach the ground.")
-        print(f"The final speed of {obj1_name} is {vf:.7f} m/s.")
-
-        yes_no = input(f"Are you looking for {obj1_name}'s position? (yes/no): ").lower()
-        
-        ty = 0
-        height_t = 0
-        
-        if yes_no in ["yes", "y"]:
-            try:
-                ty = float(input("At what time? (in seconds): "))
-                if ty < 0 or ty > t:
-                    raise ValueError("Time must be between 0 and the total fall time.")
-                height_t = obj1_height - (1 / 2) * f1 * (ty ** 2)
-            except ValueError as e:
-                print(e)
-            print(f"Height of {obj1_name}: {height_t:.7f} meters at {ty:.7f} seconds.")
-
-        self.plot_freefall_graphs(f1, t, obj1_height)
-
     def run(self):
+        
+        if not self.runs:
+            print("Error: No 'run' command found. Simulation cannot execute.")
+            return
+        
+        for run in self.runs: # simulation name has to exist in order to execute
+            if run.simulationName == self.modelName:
+                break
+            else:
+                # if no matching simulation name found
+                print(f"Error: Simulation with that name not found.")
+                return
+            
         print("Running Simulation:")
         for obj in self.objects:
             print(obj)
@@ -402,8 +422,15 @@ class SimulationInterpreter:
             print(force)
         for event in self.events:
             print(f"Event: {event}")
-            
+    
         self.run_event() # call the run event
+                
+
+
+    def run_event(self):
+        for event_name in self.events: # automatically run each event found in the model
+            print(f"Running event: {event_name}")
+            self.calculate(event_name)
 
 
 def main():
