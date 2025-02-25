@@ -15,24 +15,4 @@ simulation MySimulation {
         "throwing"
     }
 }
-simulation MySimulation {
-    objects {
-        object Ball {
-            mass = 5.0 
-            position = (0.0, 5.0)
-            velocity = (5.0, 0.0)
-            acceleration = (0.0, 0.0)
-        }
-    }
-    forces {
-        force Gravity 
-        magnitude = 9.8 
-        direction = "down"
-    }
-    events {
-        "throwing" {
-            trigger = "Ball.position.y > 10.0"
-            action = "Ball.velocity = (0.0, 0.0)"
-        }
-    }
-}
+run MySimulation
